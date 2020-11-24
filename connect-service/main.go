@@ -7,6 +7,10 @@ import (
 
 func handleEventMessage(topic string, message string)  {
 	fmt.Println("Handling event message")
+	_, err := ParseMqttMessage(message)
+	if err != nil {
+
+	}
 }
 
 func handleActionMessage(topic string, message string)  {
