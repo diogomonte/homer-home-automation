@@ -7,7 +7,7 @@ import (
 
 func TestParseMqttMessageSuccess(t *testing.T) {
 	m, err := ParseMqttMessage("{\"header\": {\"message_id\":\"123\"}, \"body\": {\"light\":\"on\"}}")
-	if m == nil {
+	if err != nil {
 		t.Errorf("Expected to parse json successfully")
 	}
 	if err != nil {

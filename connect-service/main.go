@@ -2,27 +2,37 @@ package main
 
 import (
 	"fmt"
-	"time"
+	"github.com/gorilla/mux"
+	"log"
+	"net/http"
 )
+
+var mqttClient MqttClient
 
 func handleEventMessage(topic string, message string)  {
 	fmt.Println("Handling event message")
 	_, err := ParseMqttMessage(message)
 	if err != nil {
-
+		fmt.Errorf("error parsing mqtt message %s", message)
 	}
 }
 
-func handleActionMessage(topic string, message string)  {
-	fmt.Println("Handling action message")
+func handleActionRequest(response http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	deviceId := params["deviceId"]
+	if mqttClient == nil {
+		log.Println("Null mqtt client")
+	} else {
+		mqttClient.Publish("homeautomation/1/action", "hello! I am alive: " + deviceId)
+	}
 }
 
 func main()  {
-	mqtt := InitializeMqttClient("tcp://localhost:1883")
-	mqtt.Subscribe("homeautomation/+/event", handleEventMessage)
-	mqtt.Subscribe("homeautomation/+/action", handleActionMessage)
+	log.Println("-- Running Connect Service --")
+	mqttClient = InitializeMqttClient("tcp://localhost:1883")
+	mqttClient.Subscribe("homeautomation/+/event", handleEventMessage)
 
-	for true {
-		time.Sleep(time.Second)
-	}
+	r := mux.NewRouter().StrictSlash(true)
+	r.HandleFunc("/device/{deviceId}/action", handleActionRequest).Methods("POST")
+	log.Fatal(http.ListenAndServe(":8081", r))
 }

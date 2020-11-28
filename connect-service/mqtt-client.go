@@ -12,6 +12,7 @@ import (
 
 type MqttClient interface {
 	Subscribe(topic string, callback func(string, string))
+	Publish(topic string, message string)
 }
 
 type mqttConnection struct {
@@ -26,14 +27,25 @@ func NewMqttClient(uri string) MqttClient  {
 	}
 	newUUID, _ := uuid.NewUUID()
 	client := connect(newUUID.String(), mqttUrl)
-	return &mqttConnection{mqttClient: client}
+	return mqttConnection{mqttClient: client}
 }
 
-func (c *mqttConnection) Subscribe(topic string, callback func(string, string))  {
-	c.mqttClient.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
+func (c mqttConnection) Subscribe(topic string, callback func(string, string))  {
+	token := c.mqttClient.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 		fmt.Printf("* [%s] %s\n", msg.Topic(), string(msg.Payload()))
 		callback(msg.Topic(), string(msg.Payload()))
 	})
+	if token.Error() != nil {
+		_ = fmt.Errorf("error subscribing to mqtt topic %s", topic)
+	}
+}
+
+func (c mqttConnection) Publish(topic string, message string)  {
+	log.Printf("publishing message on %s", topic)
+	token := c.mqttClient.Publish(topic, 0, false, message)
+	if token.Error() != nil {
+		_ = fmt.Errorf("error publishing mqtt message")
+	}
 }
 
 
