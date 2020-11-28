@@ -13,6 +13,7 @@ type MqttMessage struct {
 	Body map[string]string		`json:"body"`
 }
 
+
 func ParseMqttMessage(m string) (MqttMessage, error) {
 	var mqttMessage MqttMessage
 	err := json.Unmarshal([]byte(m), &mqttMessage)
