@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/diogomonte/home-automation/common"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -11,10 +12,11 @@ var mqttClient MqttClient
 
 func handleEventMessage(topic string, message string)  {
 	fmt.Println("Handling event message")
-	_, err := ParseMqttMessage(message)
+	m, err := common.ParseMqttMessage(message)
 	if err != nil {
 		fmt.Errorf("error parsing mqtt message %s", message)
 	}
+	fmt.Print(m)
 }
 
 func handleActionRequest(response http.ResponseWriter, r *http.Request) {
@@ -23,7 +25,7 @@ func handleActionRequest(response http.ResponseWriter, r *http.Request) {
 	if mqttClient == nil {
 		log.Println("Null mqtt client")
 	} else {
-		mqttClient.Publish("homeautomation/1/action", "hello! I am alive: " + deviceId)
+		mqttClient.Publish("homeautomation/" + deviceId + "/action", "hello! I am alive: " + deviceId)
 	}
 }
 
