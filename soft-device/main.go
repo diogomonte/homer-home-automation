@@ -2,20 +2,13 @@ package main
 
 import (
 	"encoding/json"
+	"github.com/diogomonte/home-automation/common"
 	"github.com/google/uuid"
 	"math/rand"
 	"strconv"
 	"time"
 )
 
-type MqttMessageHeader struct {
-	MessageId string	`json:"message_id"`
-}
-
-type MqttMessage struct {
-	Header MqttMessageHeader 	`json:"header"`
-	Body map[string]string		`json:"body"`
-}
 
 func main() {
 	mqttClient := NewMqttClient("tcp://localhost:1883")
@@ -24,8 +17,8 @@ func main() {
 		body := make(map[string]string)
 		body["temperature"] = random
 
-		message := MqttMessage{
-			Header: MqttMessageHeader{
+		message := common.MqttMessage{
+			Header: common.MqttMessageHeader{
 				MessageId: uuid.New().String(),
 			},
 			Body: body,
