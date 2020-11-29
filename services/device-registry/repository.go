@@ -5,12 +5,14 @@ import (
 )
 
 type Device struct {
-	Id string
+	Id string `gorm:"primary_key"`
 }
 
 type DeviceRepository interface {
 	Save(device Device)
+	Delete(deviceId string)
 	List() []Device
+	Find(deviceId string) Device
 }
 
 type repository struct {
@@ -32,4 +34,15 @@ func (r repository) List() []Device  {
 	var devices []Device
 	r.db.Find(&devices)
 	return devices
+}
+
+func (r repository) Delete(deviceId string) {
+	var device Device
+	r.db.Delete(&device, deviceId)
+}
+
+func (r repository) Find(deviceId string) Device {
+	var device Device
+	r.db.First(&device, deviceId)
+	return device
 }

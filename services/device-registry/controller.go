@@ -7,8 +7,10 @@ type CreateRequest struct {
 }
 
 type DeviceController interface {
-	CreateDevice(request CreateRequest)
-	ListDevices() []Device
+	Create(request CreateRequest)
+	Delete(deviceId string)
+	List() []Device
+	Find(deviceId string) Device
 }
 
 type controller struct {
@@ -22,10 +24,18 @@ func NewDeviceController(repository DeviceRepository) DeviceController {
 	return controller{deviceRepository: deviceRepository}
 }
 
-func (c controller) CreateDevice(request CreateRequest) {
+func (c controller) Create(request CreateRequest) {
 	deviceRepository.Save(Device{Id: uuid.New().String()})
 }
 
-func (c controller) ListDevices() []Device {
+func (c controller) List() []Device {
 	return deviceRepository.List()
+}
+
+func (c controller) Find(deviceId string) Device {
+	return deviceRepository.Find(deviceId)
+}
+
+func (c controller) Delete(deviceId string) {
+	deviceRepository.Delete(deviceId)
 }
