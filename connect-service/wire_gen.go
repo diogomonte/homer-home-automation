@@ -5,9 +5,13 @@
 
 package main
 
+import (
+	"github.com/diogomonte/home-automation/mqtt"
+)
+
 // Injectors from wire.go:
 
-func InitializeMqttClient(uri string) MqttClient {
-	mqttClient := NewMqttClient(uri)
-	return mqttClient
+func InitializeMqttClient(uri string) common.MqttClient {
+	commonMqttClient := common.NewMqttClient(uri)
+	return commonMqttClient
 }

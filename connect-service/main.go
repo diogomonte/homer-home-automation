@@ -2,17 +2,17 @@ package main
 
 import (
 	"fmt"
-	"github.com/diogomonte/home-automation/common"
+	mqtt "github.com/diogomonte/home-automation/mqtt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
-var mqttClient MqttClient
+var mqttClient mqtt.MqttClient
 
 func handleEventMessage(topic string, message string)  {
 	fmt.Println("Handling event message")
-	m, err := common.ParseMqttMessage(message)
+	m, err := mqtt.ParseMqttMessage(message)
 	if err != nil {
 		fmt.Errorf("error parsing mqtt message %s", message)
 	}
