@@ -13,7 +13,7 @@ func InitializeDeviceRegistry() DeviceController {
 	var appConfig = make(map[string]string)
 	appConfig["MYSQL_USER"] = "root"
 	appConfig["MYSQL_ROOT_PASSWORD"] = "root"
-	appConfig["MYSQL_ROOT_HOST"] = "127.0.0.1"
+	appConfig["MYSQL_ROOT_HOST"] = "mysql"
 	appConfig["MYSQL_PROTOCOL"] = "tcp"
 	appConfig["MYSQL_PORT"] = "3306"
 	appConfig["MYSQL_DATABASE"] = "device_registry"
