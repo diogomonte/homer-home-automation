@@ -1,4 +1,4 @@
-package mqtt
+package common
 
 import (
 	"reflect"
@@ -14,7 +14,7 @@ func TestParseMqttMessageSuccess(t *testing.T) {
 		t.Errorf("Expected an error for invalid Json")
 	}
 	if m.Header.MessageId != "123" {
-		t.Errorf("Message Id should be ´123´ got %s", m.Header.MessageId)
+		t.Errorf("MqttMessage Id should be ´123´ got %s", m.Header.MessageId)
 	}
 	body := map[string]string{"light": "on"}
 	if !reflect.DeepEqual(m.Body, body) {

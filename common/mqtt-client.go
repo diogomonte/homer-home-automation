@@ -1,8 +1,8 @@
-package mqtt
+package common
 
 import (
 	"fmt"
-	paho "github.com/eclipse/paho.paho.golang"
+	mqtt "github.com/eclipse/mqtt.mqtt.golang"
 	"github.com/google/uuid"
 	"log"
 	"net/url"
@@ -16,11 +16,11 @@ type MqttClient interface {
 }
 
 type mqttConnection struct {
-	mqttClient paho.Client
+	mqttClient mqtt.Client
 }
 
 func (c mqttConnection) Subscribe(topic string, callback func(string, string)) {
-	token := c.mqttClient.Subscribe(topic, 0, func(client paho.Client, msg paho.Message) {
+	token := c.mqttClient.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 		callback(msg.Topic(), string(msg.Payload()))
 	})
 	if token.Error() != nil {
@@ -35,8 +35,8 @@ func (c mqttConnection) Publish(topic string, message string) {
 	}
 }
 
-func newClientOptions(clientId string, uri *url.URL) *paho.ClientOptions {
-	opts := paho.NewClientOptions()
+func newClientOptions(clientId string, uri *url.URL) *mqtt.ClientOptions {
+	opts := mqtt.NewClientOptions()
 	opts.AddBroker(fmt.Sprintf("tcp://%s", uri.Host))
 	opts.SetUsername(uri.User.Username())
 	password, _ := uri.User.Password()
@@ -48,12 +48,12 @@ func newClientOptions(clientId string, uri *url.URL) *paho.ClientOptions {
 func Connect(uri string) MqttClient {
 	mqttUrl, err := url.Parse(uri)
 	if err != nil {
-		log.Fatalf("Cannot parse paho string url: %s", uri)
+		log.Fatalf("Cannot parse mqtt string url: %s", uri)
 		os.Exit(1)
 	}
 	newUUID, _ := uuid.NewUUID()
 
-	client := paho.NewClient(newClientOptions(newUUID.String(), mqttUrl))
+	client := mqtt.NewClient(newClientOptions(newUUID.String(), mqttUrl))
 	token := client.Connect()
 	for !token.WaitTimeout(3 * time.Second) {
 	}
