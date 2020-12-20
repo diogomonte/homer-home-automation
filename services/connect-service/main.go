@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	mqtt "github.com/diogomonte/home-automation/mqtt"
+	"github.com/diogomonte/home-automation/mqtt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -47,7 +47,7 @@ func handleActionRequest(response http.ResponseWriter, r *http.Request) {
 func main()  {
 	log.Println("-- Running Connect Service --")
 
-	mqttClient = InitializeMqttClient("tcp://mqtt_broker:1883")
+	mqttClient = mqtt.Connect("tcp://mqtt_broker:1883")
 	mqttClient.Subscribe("homeautomation/+/event", handleEventMessage)
 
 	r := mux.NewRouter().StrictSlash(true)

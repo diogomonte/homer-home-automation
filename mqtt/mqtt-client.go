@@ -19,17 +19,6 @@ type mqttConnection struct {
 	mqttClient mqtt.Client
 }
 
-func NewMqttClient(uri string) MqttClient  {
-	mqttUrl, err := url.Parse(uri)
-	if err != nil {
-		log.Fatalf("Cannot parse mqtt string url: %s", uri)
-		os.Exit(1)
-	}
-	newUUID, _ := uuid.NewUUID()
-	client := connect(newUUID.String(), mqttUrl)
-	return mqttConnection{mqttClient: client}
-}
-
 func (c mqttConnection) Subscribe(topic string, callback func(string, string))  {
 	token := c.mqttClient.Subscribe(topic, 0, func(client mqtt.Client, msg mqtt.Message) {
 		callback(msg.Topic(), string(msg.Payload()))
@@ -57,13 +46,21 @@ func newClientOptions(clientId string, uri *url.URL) *mqtt.ClientOptions {
 	return opts
 }
 
-func connect(clientId string, uri *url.URL) mqtt.Client {
-	client := mqtt.NewClient(newClientOptions(clientId, uri))
+func Connect(uri string) MqttClient {
+	mqttUrl, err := url.Parse(uri)
+	if err != nil {
+		log.Fatalf("Cannot parse mqtt string url: %s", uri)
+		os.Exit(1)
+	}
+	newUUID, _ := uuid.NewUUID()
+
+	client := mqtt.NewClient(newClientOptions(newUUID.String(), mqttUrl))
 	token := client.Connect()
 	for !token.WaitTimeout(3 * time.Second) {
 	}
+
 	if err := token.Error(); err != nil {
 		log.Fatal(err)
 	}
-	return client
+	return mqttConnection{mqttClient: client}
 }

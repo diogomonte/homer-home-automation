@@ -9,8 +9,8 @@ type MqttMessageHeader struct {
 }
 
 type MqttMessage struct {
-	Header MqttMessageHeader 	`json:"header"`
-	Body map[string]string		`json:"body"`
+	Header MqttMessageHeader `json:"header"`
+	Body   map[string]string `json:"body"`
 }
 
 func ParseMqttMessage(m string) (MqttMessage, error) {
