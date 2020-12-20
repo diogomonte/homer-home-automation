@@ -7,8 +7,6 @@ import (
 	"log"
 )
 
-
-
 func InitializeDeviceRegistry() DeviceController {
 	var appConfig = make(map[string]string)
 	appConfig["MYSQL_USER"] = "root"
@@ -26,9 +24,9 @@ func InitializeDeviceRegistry() DeviceController {
 		appConfig["MYSQL_PORT"],
 		appConfig["MYSQL_DATABASE"],
 	)
- 	db, err := gorm.Open("mysql", mysqlCredentials)
- 	if err != nil {
- 		log.Fatal("failed to connect to mysql database", err.Error())
+	db, err := gorm.Open("mysql", mysqlCredentials)
+	if err != nil {
+		log.Fatal("failed to connect to mysql database", err.Error())
 	}
 	repository := NewDeviceRepository(db)
 	controller := NewDeviceController(repository)

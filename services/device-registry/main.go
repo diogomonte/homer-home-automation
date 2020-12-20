@@ -10,7 +10,7 @@ import (
 
 var deviceController DeviceController
 
-func HandleCreateAction(res http.ResponseWriter, req *http.Request)  {
+func HandleCreateAction(res http.ResponseWriter, req *http.Request) {
 	var request CreateRequest
 	err := json.NewDecoder(req.Body).Decode(&request)
 	if err != nil {
@@ -20,14 +20,14 @@ func HandleCreateAction(res http.ResponseWriter, req *http.Request)  {
 	deviceController.Create(request)
 }
 
-func HandleListDevices(w http.ResponseWriter, _ *http.Request)  {
+func HandleListDevices(w http.ResponseWriter, _ *http.Request) {
 	devices := deviceController.List()
 	responseBody, _ := json.Marshal(devices)
 	w.Header().Add("Content-Type", "application/json")
 	fmt.Fprint(w, string(responseBody))
 }
 
-func HandleFindDevice(w http.ResponseWriter, r *http.Request)  {
+func HandleFindDevice(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	device := deviceController.Find(params["deviceId"])
 	responseBody, _ := json.Marshal(device)
@@ -35,7 +35,7 @@ func HandleFindDevice(w http.ResponseWriter, r *http.Request)  {
 	fmt.Fprint(w, string(responseBody))
 }
 
-func HandleDeleteDevice(w http.ResponseWriter, r *http.Request)  {
+func HandleDeleteDevice(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	devices := deviceController.Find(params["deviceId"])
 	responseBody, _ := json.Marshal(devices)
@@ -43,7 +43,7 @@ func HandleDeleteDevice(w http.ResponseWriter, r *http.Request)  {
 	fmt.Fprint(w, string(responseBody))
 }
 
-func main()  {
+func main() {
 	log.Print("-- Start Device Registry --")
 	deviceController = InitializeDeviceRegistry()
 	r := mux.NewRouter().StrictSlash(true)

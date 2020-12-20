@@ -3,7 +3,6 @@ package main
 import "github.com/google/uuid"
 
 type CreateRequest struct {
-
 }
 
 type DeviceController interface {

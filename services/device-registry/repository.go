@@ -26,11 +26,11 @@ func NewDeviceRepository(deviceDb *gorm.DB) DeviceRepository {
 	return repository{db: deviceDb}
 }
 
-func (r repository) Save(device Device)  {
+func (r repository) Save(device Device) {
 	r.db.Save(device)
 }
 
-func (r repository) List() []Device  {
+func (r repository) List() []Device {
 	var devices []Device
 	r.db.Find(&devices)
 	return devices
