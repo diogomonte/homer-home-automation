@@ -2,7 +2,7 @@ package mqtt
 
 import (
 	"fmt"
-	mqtt "github.com/eclipse/mqtt.mqtt.golang"
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"github.com/google/uuid"
 	"log"
 	"net/url"
