@@ -3,7 +3,7 @@ services:
   # Environment
   mqtt_broker:
     container_name: mqtt_broker
-    image: arm64v8/eclipse-mosquitto:2.0.3
+    image: mjenz/rpi-mosquitto:1.4.15
     ports:
       - "1883:1883"
       - "8080:8080"
