@@ -1,20 +1,20 @@
-package common
+package mqtt
 
 import (
 	"encoding/json"
 )
 
-type MqttMessageHeader struct {
+type MessageHeader struct {
 	MessageId string `json:"message_id"`
 }
 
-type MqttMessage struct {
-	Header MqttMessageHeader `json:"header"`
+type Message struct {
+	Header MessageHeader     `json:"header"`
 	Body   map[string]string `json:"body"`
 }
 
-func ParseMqttMessage(m string) (MqttMessage, error) {
-	var mqttMessage MqttMessage
+func ParseMqttMessage(m string) (Message, error) {
+	var mqttMessage Message
 	err := json.Unmarshal([]byte(m), &mqttMessage)
 	if err != nil {
 		return mqttMessage, err

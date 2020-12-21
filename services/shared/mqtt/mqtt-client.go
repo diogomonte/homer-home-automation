@@ -1,4 +1,4 @@
-package common
+package mqtt
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type MqttClient interface {
+type Connection interface {
 	Subscribe(topic string, callback func(string, string))
 	Publish(topic string, message string)
 }
@@ -45,7 +45,7 @@ func newClientOptions(clientId string, uri *url.URL) *mqtt.ClientOptions {
 	return opts
 }
 
-func Connect(uri string) MqttClient {
+func Connect(uri string) Connection {
 	mqttUrl, err := url.Parse(uri)
 	if err != nil {
 		log.Fatalf("Cannot parse mqtt string url: %s", uri)

@@ -3,18 +3,18 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/diogomonte/home-automation/common"
+	"github.com/diogomonte/home-automation/services/shared/mqtt"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
 )
 
-var mqttClient common.MqttClient
+var mqttClient mqtt.Connection
 
 func handleEventMessage(topic string, message string) {
 	fmt.Println("Handling event message")
 
-	m, err := common.ParseMqttMessage(message)
+	m, err := mqtt.ParseMqttMessage(message)
 	if err != nil {
 		fmt.Errorf("error parsing mqtt message %s", message)
 	}
@@ -22,7 +22,7 @@ func handleEventMessage(topic string, message string) {
 }
 
 func handleActionRequest(response http.ResponseWriter, r *http.Request) {
-	var mqttMessageFormat common.MqttMessage
+	var mqttMessageFormat mqtt.Message
 
 	err := json.NewDecoder(r.Body).Decode(&mqttMessageFormat)
 	if err != nil {
@@ -47,7 +47,7 @@ func handleActionRequest(response http.ResponseWriter, r *http.Request) {
 func main() {
 	log.Println("-- Running Connect Service --")
 
-	mqttClient = common.Connect("tcp://mqtt_broker:1883")
+	mqttClient = mqtt.Connect("tcp://mqtt_broker:1883")
 	mqttClient.Subscribe("homeautomation/+/event", handleEventMessage)
 
 	r := mux.NewRouter().StrictSlash(true)
