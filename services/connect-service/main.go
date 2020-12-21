@@ -12,7 +12,7 @@ import (
 var mqttClient mqtt.Connection
 
 func handleEventMessage(topic string, message string) {
-	fmt.Println("Handling event message")
+	fmt.Println("handling event message")
 
 	m, err := mqtt.ParseMqttMessage(message)
 	if err != nil {

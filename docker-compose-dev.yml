@@ -1,13 +1,5 @@
 version: '3.7'
 services:
-  # Template
-  #go-service:
-  #  build:
-  #    dockerfile: dockerfiles/dev.go.dockerfile
-  #    context: .
-  #  volumes:
-  #    - .:/app
-
   # Environment
   mqtt_broker:
     container_name: mqtt_broker
@@ -40,16 +32,16 @@ services:
 
   # Microservices
   service.connect:
-    container_name: connect-service
     links:
       - mqtt_broker
     build:
       dockerfile: services/connect-service/dev.dockerfile
       context: .
+    ports:
+      - 8081:8
     volumes:
       - .:/app
-    ports:
-      - 8081:8081
+    restart: always
 
     #service.deviceregistry:
     #container_name: device-registry

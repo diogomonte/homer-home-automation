@@ -15,8 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -o /services/connect-service .
-
+RUN env GOOS=linux GOARCH=arm GOARM=5 go build -o /services/connect-service .
 
 # This container exposes port 8081 to the outside world
 EXPOSE 8081
