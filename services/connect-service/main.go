@@ -47,7 +47,7 @@ func handleActionRequest(response http.ResponseWriter, r *http.Request) {
 func main() {
 	log.Println("-- Running Connect Service --")
 
-	mqttClient = mqtt.Connect("tcp://mqtt_broker:1883")
+	mqttClient = mqtt.Connect("tcp://192.168.10.147:1883")
 	mqttClient.Subscribe("homeautomation/+/event", handleEventMessage)
 
 	r := mux.NewRouter().StrictSlash(true)

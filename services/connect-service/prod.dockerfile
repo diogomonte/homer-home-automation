@@ -1,4 +1,4 @@
-FROM golang:1.14-alpine
+FROM arm32v7/golang:1.14
 
 RUN apk add --no-cache git
 
@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Build the Go app
-RUN env GOOS=linux GOARCH=arm GOARM=5 go build -o /services/connect-service .
+RUN env GOARCH=arm64 GOOS=linux go build -o /services/connect-service .
 
 # This container exposes port 8081 to the outside world
 EXPOSE 8081
