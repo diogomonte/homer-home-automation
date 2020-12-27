@@ -31,14 +31,14 @@ services:
   #    - my-db:/var/lib/mysql
 
   # Microservices
-  service.connect:
+  service.devicebridge:
     links:
       - mqtt_broker
     build:
-      dockerfile: services/connect-service/dev.dockerfile
+      dockerfile: ../home-automation-bridge/Dockerfile
       context: .
     ports:
-      - 8081:8
+      - 8081:8081
     volumes:
       - .:/app
     restart: always
@@ -48,7 +48,7 @@ services:
       #links:
       #- mysql
       #build:
-      #dockerfile: services/device-registry/dev.dockerfile
+      #dockerfile: services/device-registry/Dockerfile.connect
       #context: .
       #volumes:
       #- .:/app
