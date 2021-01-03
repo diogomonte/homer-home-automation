@@ -10,25 +10,25 @@ services:
       - "8883:8883"
     restart: always
 
-  #mysql:
-  #  container_name: mysql
-  #  image: mysql:5.7
-  #  restart: always
-  #  command: --init-file /data/application/init.sql
-  #  ports:
-  #    - '3306:3306'
-  #  environment:
-  #    MYSQL_DATABASE: 'device-registry'
-  #    MYSQL_USER: 'root'
-  #    MYSQL_PASSWORD: 'root'
-  #    MYSQL_ROOT_PASSWORD: 'root'
-  #  healthcheck:
-  #    test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
-  #    timeout: 20s
-  #    retries: 10
-  #  volumes:
-  #    - ./init.sql:/data/application/init.sql
-  #    - my-db:/var/lib/mysql
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    restart: always
+    command: --init-file /data/application/init.sql
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_DATABASE: 'device-registry'
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ./init.sql:/data/application/init.sql
+      - my-db:/var/lib/mysql
 
   # Microservices
   service.devicebridge:
@@ -43,17 +43,18 @@ services:
       - .:/app
     restart: always
 
-    #service.deviceregistry:
-    #container_name: device-registry
-      #links:
-      #- mysql
-      #build:
-      #dockerfile: services/device-registry/Dockerfile.connect
-      #context: .
-      #volumes:
-      #- .:/app
-      #ports:
-      #- 8081:8082
+  # Microservices
+  service.deviceregistry:
+    links:
+      - mysql
+    build:
+      dockerfile: ../home-automation-device-registry/Dockerfile
+      context: .
+    ports:
+      - 8082:8082
+    volumes:
+      - .:/app
+    restart: always
 
 volumes:
   my-db:
